@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Actions\Discogs\GetReleases;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,14 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    $user = auth()->user();
+
+    $items = [];
+    if ($user->discogs_username) {
+        $items = (new GetReleases())->releases($user->discogs_username);
+    }
+
     return Inertia::render('Dashboard', [
-        'releases' => [1,2,3]
+        'releases' => $items
     ]);
 })->name('dashboard');
