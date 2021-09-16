@@ -14,6 +14,11 @@ return [
     |
     */
 
+    'discogs' => [
+        'key' => env('DISCOGS_KEY'),
+        'secret' => env('DISCOGS_SECRET'),
+    ],
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
