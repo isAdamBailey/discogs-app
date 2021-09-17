@@ -15,14 +15,15 @@
             </div>
 
             <div class="mt-6 text-gray-500">
-              At this time, you have to manually enter the discogs username to the database users table.
-              Once you do, refresh the page and you'll see the releases. That's all I have for now.
+              Here are the releases for the user name you entered,
+              <strong>{{ $page.props.user.discogs_username}}</strong>
             </div>
           </div>
 
           <table v-if="releases.releases" class="bg-white min-w-full">
             <thead>
             <tr>
+              <th class="border-b border-gray-200 bg-gray-50"></th>
               <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                 Artist
               </th>
@@ -35,50 +36,47 @@
               <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                 Genre
               </th>
-              <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
             </tr>
             </thead>
 
             <tbody>
             <tr v-for="release in releases.releases">
+              <td class="px-3 lg:px-6 py-4 border-b border-gray-200">
+                <img :src="release['basic_information']['thumb']" alt="cover image"/>
+              </td>
               <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="flex items-center">
                   <div class="ml-4">
+                    <div class="text-sm leading-5 text-gray-500">Artist info</div>
                     <div class="text-sm leading-5 font-medium text-gray-900">
                       {{ release['basic_information']['artists'][0]['name'] }}
                     </div>
-                    <div class="text-sm leading-5 text-gray-500">Artist info</div>
                   </div>
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-500">Album info</div>
                 <div class="text-sm leading-5 text-gray-900">
                   {{ release['basic_information']['title'] }}
                 </div>
-                <div class="text-sm leading-5 text-gray-500">Album info</div>
               </td>
               <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-500">Label info</div>
                 <div class="text-sm leading-5 text-gray-900">
                   {{ release['basic_information']['labels'][0]['name'] }}
                 </div>
-                <div class="text-sm leading-5 text-gray-500">Label info</div>
               </td>
               <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
                 <div class="text-sm leading-5 text-gray-900">
                   {{ release['basic_information']['styles'][0] }}
                 </div>
               </td>
-              <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-              </td>
             </tr>
             </tbody>
           </table>
 
           <div v-else class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-            <div class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
-              we dont have your discogs username, at this time you have to manually add it to the table
-            </div>
+            <discogs-username-form :user="$page.props.user" />
           </div>
         </div>
       </div>
@@ -87,11 +85,13 @@
 </template>
 
 <script>
-import AppLayout from '@/Layouts/AppLayout'
+import AppLayout from '@/Layouts/AppLayout';
+import DiscogsUsernameForm from "./DiscogsUsernameForm";
 
 export default {
   components: {
     AppLayout,
+    DiscogsUsernameForm
   },
 
   props: {

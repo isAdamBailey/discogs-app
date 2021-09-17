@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\DiscogsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Actions\Discogs\GetReleases;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,15 +25,10 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    $user = auth()->user();
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/dashboard', [DiscogsController::class, 'getReleases'])
+        ->name('dashboard');
 
-    $items = [];
-    if ($user->discogs_username) {
-        $items = (new GetReleases())->releases($user->discogs_username);
-    }
-
-    return Inertia::render('Dashboard', [
-        'releases' => $items
-    ]);
-})->name('dashboard');
+    Route::put('/user/store-discogs-username', [DiscogsController::class, 'storeUsername'])
+        ->name('discogs-username.store');
+});
